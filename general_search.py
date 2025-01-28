@@ -5,7 +5,9 @@ class Node:
         self.state = state
         self.children = []
         self.parent = []
-
+def initial_input():
+    print("Lets start playing the 8 puzzle. Please enter valid 8-puzzle inputs in each row with a space when asked.")
+    entry_message = input("Please Enter the first Row, make sure to include space between.")
 
 def queue_make_node(initial_state):
     #create a new quene and node
@@ -28,6 +30,6 @@ def general_search(problem,QUEUEING_FUNCTION, target):
 
 def main():
     #assuming we
-    print("hh")
+    initial_input()
 
 main()
