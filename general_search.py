@@ -21,18 +21,22 @@ class Node:
                                 matrix[row][column], matrix[row][ column + 1] =  matrix[row][column + 1], matrix[row][column]
                                 return_children.append(matrix)
                         if i==1:
-                            if(column < len(matrix)-1):
+                            if(column >= 1):
                                 matrix[row][column], matrix[row][column - 1] =  matrix[row][column - 1], matrix[row][column]
                                 return_children.append(matrix)
                         if i==2:
-                            if(column < len(matrix)-1):
+                            if(row + 1<3):
                                 matrix[row][column], matrix[row+1][column] =  matrix[row+1][column], matrix[row][column]
                                 return_children.append(matrix)
                         if i==3:
-                            if(column < len(matrix)-1):
+                            if(row - 1>=0):
                                 matrix[row][column], matrix[row-1][column] =  matrix[row-1][column], matrix[row][column]
                                 return_children.append(matrix)
-        
+            #Now we want to create all the matrixes to node because we want to store the nodes
+            for row in range(len(return_children)):
+                create_node = Node(return_children[row])
+                return_children[row] = create_node
+
         return return_children
 
 
@@ -62,18 +66,21 @@ def queue_make_node(initial_state):
     return queue
 
 def general_search(problem, target):
+    print("general_search")
     #make
     repeat = set()
     nodes = queue_make_node(problem)
     #check if the whole quene is empty
     while (len(nodes)!=0):
         curNode = nodes.pop(0) #remove the first element
+        repeat.add(curNode)
         #check if the state is repeated, pop it
         if(curNode.state == target): #this is how we are checking if its a goal state
             return curNode
         for child in curNode.children(): #simmilar to expanding
             child.parent = curNode
-            nodes.append(child)
+            if(curNode not in repeat):
+                nodes.append(child) #appending children
     return "Failure"
 
 def main():
@@ -82,9 +89,9 @@ def main():
     #Now we want the user to pick the heurisitc they are going to use to solve the algorithm
     Heuristic = input("Please pick the heuristic you want to use to solve the algorithm. 1. Uniform Cost Search, 2. The Manhattan distance, 3.The Misplaced Tile: ")
     target = [[1, 2, 3], [4, 0, 5], [6, 7, 8]] #sample target
-    if(Heuristic==1):
-        general_search(matrix, target) #the problem here would be the matrix
-    print(matrix)
+    if(Heuristic=="1"):
+        result = (general_search(matrix, target)) #the problem here would be the matrix
+        print(result)
 
 
 main()
