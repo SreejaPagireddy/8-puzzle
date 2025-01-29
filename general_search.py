@@ -1,25 +1,35 @@
 #lets first create a function
 class Node:    
     def __init__(self,state):
+        #this is the state of the node
         self.state = state
+        #parent tracker
         self.parent = []
+        #lets keep track of the cost for uniform cost search
+        self.cost= 0
     #this is how we print a node
     def print(self):
+        #in order to print out the nodes
         print(self.state)
 
     def children(self):
         #now creating the children of the matrixes
         return_children = []
+        #we want to make max 4 matrixes for a certain case
         for i in range(4):
+            #lets create the matrix
             matrix=[]
             for row in range(3):
                 first = [] #creating an array
                 for column in range(3): #
+                    #this is the initial values that the user enters into the matrix
                     first.append(self.state[row][column])
                 matrix.append(first)
+            # a tracker to break out the loop each time we make a move so there arent double of them
             done  = False
             for row in range(3):
                 for column in range(3):
+                    #lets fine the blank space
                     if(matrix[row][column]==0):
                         done = True
                         if i==0:
@@ -46,6 +56,10 @@ class Node:
             #Now we want to create all the matrixes to node because we want to store the nodes
         for row in range(len(return_children)):
             create_node = Node(return_children[row])
+            create_node.cost = self.cost + 1 
+            create_node.parent = self
+            print (create_node.print())
+            print (create_node.cost)
             return_children[row] = create_node
 
         return return_children
@@ -83,7 +97,8 @@ def general_search(problem, target):
     #check if the whole quene is empty
     while (len(nodes)!=0):
         curNode = nodes.pop(0) #remove the first element
-        repeat.add(curNode)
+        repeat.add(tuple(map(tuple, curNode.state)))
+        # repeat.add(tuple(tuple(curNode.state)))
         #check if the state is repeated, pop it
         if(curNode.state == target): #this is how we are checking if its a goal state
             return curNode
@@ -103,6 +118,4 @@ def main():
         #this is a node
         result = (general_search(matrix, target)) #the problem here would be the matrix
         result.print() # we want to print from the class
-
-
 main()
