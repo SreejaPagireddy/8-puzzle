@@ -2,7 +2,7 @@
 class Node:    
     def __init__(self,state):
         #this is the state of the node
-        self.state = state
+        self.matrix = state
         #parent tracker
         self.parent = []
         #lets keep track of the cost for uniform cost search
@@ -10,7 +10,7 @@ class Node:
     #this is how we print a node
     def print(self):
         #in order to print out the nodes
-        print(self.state)
+        print(self.matrix)
 
     def children(self):
         #now creating the children of the matrixes
@@ -23,7 +23,7 @@ class Node:
                 first = [] #creating an array
                 for column in range(3): #
                     #this is the initial values that the user enters into the matrix
-                    first.append(self.state[row][column])
+                    first.append(self.matrix[row][column])
                 matrix.append(first)
             # a tracker to break out the loop each time we make a move so there arent double of them
             done  = False
@@ -58,8 +58,8 @@ class Node:
             create_node = Node(return_children[row])
             create_node.cost = self.cost + 1 
             create_node.parent = self
-            print (create_node.print())
-            print (create_node.cost)
+            #print (create_node.print())
+            #print (create_node.cost)
             return_children[row] = create_node
 
         return return_children
@@ -97,15 +97,17 @@ def general_search(problem, target):
     #check if the whole quene is empty
     while (len(nodes)!=0):
         curNode = nodes.pop(0) #remove the first element
-        repeat.add(tuple(map(tuple, curNode.state)))
-        # repeat.add(tuple(tuple(curNode.state)))
+        repeat.add(tuple(map(tuple, curNode.matrix)))
+        # repeat.add(tuple(tuple(curNode.matrix)))
         #check if the state is repeated, pop it
-        if(curNode.state == target): #this is how we are checking if its a goal state
+        if(curNode.matrix == target): #this is how we are checking if its a goal state
+            print("COST",curNode.cost)
             return curNode
         for child in curNode.children(): #simmilar to expanding
             child.parent = curNode
             if(not child in repeat):
                 nodes.append(child) #appending children
+                repeat.add(tuple(map(tuple, child.matrix)))
     return "Failure"
 
 def main():
@@ -113,7 +115,7 @@ def main():
     matrix = initial_input_puzzle()
     #Now we want the user to pick the heurisitc they are going to use to solve the algorithm
     Heuristic = input("Please pick the heuristic you want to use to solve the algorithm. 1. Uniform Cost Search, 2. The Manhattan distance, 3.The Misplaced Tile: ")
-    target = [[1, 2, 3], [4, 5, 0], [6, 7, 8]] #sample target
+    target = [[1, 2, 3], [4, 5, 6], [7, 8, 0]] #sample target
     if(Heuristic=="1"):
         #this is a node
         result = (general_search(matrix, target)) #the problem here would be the matrix
