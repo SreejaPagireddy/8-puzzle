@@ -60,10 +60,16 @@ class Node:
             create_node.parent = self
             #print (create_node.print())
             #print (create_node.cost)
-            return_children[row] = create_node
+            return_children[row] = create_node #putting it back into return_children array
 
         return return_children
 
+
+def calculate_misplaced_tiles():
+    return "Calculate Misplaced tiles"
+
+def calculate_manhatten():
+    return "Calculate Manhatten"
 
 def initial_input_puzzle():
     print("Lets start playing the 8 puzzle. Please enter valid 8-puzzle inputs in each row with a space when asked.")
@@ -96,12 +102,14 @@ def general_search(problem, target):
     nodes = queue_make_node(problem)
     #check if the whole quene is empty
     while (len(nodes)!=0):
+        #number of pops is time
+        #max size of the quene is memory
         curNode = nodes.pop(0) #remove the first element
         repeat.add(tuple(map(tuple, curNode.matrix)))
         # repeat.add(tuple(tuple(curNode.matrix)))
         #check if the state is repeated, pop it
         if(curNode.matrix == target): #this is how we are checking if its a goal state
-            print("COST",curNode.cost)
+            print("COST",curNode.cost) #g(n) cost, h(n) the guess to how many to solve the problem, f(n) for any state we have to know the number of misplaced tiles
             return curNode
         for child in curNode.children(): #simmilar to expanding
             child.parent = curNode
