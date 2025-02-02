@@ -65,8 +65,17 @@ class Node:
         return return_children
 
 
-def calculate_misplaced_tiles():
-    return "Calculate Misplaced tiles"
+def calculate_misplaced_tiles(initial_state):
+    # I want to calculate how many tiles are misplaced
+    goal_state = [[1, 2, 3], [4, 5, 6], [7, 8, 0]] #sample target
+    #lets create the matrix
+    total_misplaced_tiles=0
+    for row in range(3):
+        for column in range(3): #
+            if initial_state[row][column] != goal_state[row][column]:
+                total_misplaced_tiles=total_misplaced_tiles+1
+    #I did minus one here to subtract the blank space
+    return total_misplaced_tiles -1
 
 def calculate_manhatten():
     return "Calculate Manhatten"
@@ -109,6 +118,7 @@ def general_search(problem, target):
         # repeat.add(tuple(tuple(curNode.matrix)))
         #check if the state is repeated, pop it
         if(curNode.matrix == target): #this is how we are checking if its a goal state
+            #print("Misplaced Tiles f(n)",calculate_misplaced_tiles(problem)+curNode.cost)
             print("COST",curNode.cost) #g(n) cost, h(n) the guess to how many to solve the problem, f(n) for any state we have to know the number of misplaced tiles
             return curNode
         for child in curNode.children(): #simmilar to expanding
