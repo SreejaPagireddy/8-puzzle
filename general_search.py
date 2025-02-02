@@ -58,8 +58,8 @@ class Node:
             create_node = Node(return_children[row])
             create_node.cost = self.cost + 1 
             create_node.parent = self
-            #print (create_node.print())
-            #print (create_node.cost)
+            print (create_node.print())
+            print (create_node.cost)
             return_children[row] = create_node #putting it back into return_children array
 
         return return_children
@@ -78,6 +78,7 @@ def calculate_misplaced_tiles(initial_state):
     return total_misplaced_tiles -1
 
 def calculate_manhatten():
+    #count the number of tiles that it is away from where it is supposed to be
     return "Calculate Manhatten"
 
 def initial_input_puzzle():
@@ -109,17 +110,24 @@ def general_search(problem, target):
     #make
     repeat = set()
     nodes = queue_make_node(problem)
+    total_nodes=0
+    max_size=0
     #check if the whole quene is empty
     while (len(nodes)!=0):
+        max_size= max(len(nodes),max_size)
         #number of pops is time
         #max size of the quene is memory
         curNode = nodes.pop(0) #remove the first element
+        total_nodes=total_nodes+1
         repeat.add(tuple(map(tuple, curNode.matrix)))
         # repeat.add(tuple(tuple(curNode.matrix)))
         #check if the state is repeated, pop it
         if(curNode.matrix == target): #this is how we are checking if its a goal state
             #print("Misplaced Tiles f(n)",calculate_misplaced_tiles(problem)+curNode.cost)
-            print("COST",curNode.cost) #g(n) cost, h(n) the guess to how many to solve the problem, f(n) for any state we have to know the number of misplaced tiles
+            print("Solution Depth",curNode.cost) #g(n) cost, h(n) the guess to how many to solve the problem, f(n) for any state we have to know the number of misplaced tiles
+            print("Number of nodes expanded", total_nodes)
+            print("Max quene size", max_size)
+            #print("Max quene size", max)
             return curNode
         for child in curNode.children(): #simmilar to expanding
             child.parent = curNode
