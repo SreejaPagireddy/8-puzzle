@@ -58,12 +58,11 @@ class Node:
             create_node = Node(return_children[row])
             create_node.cost = self.cost + 1 
             create_node.parent = self
-            print (create_node.print())
-            print (create_node.cost)
+            #print (create_node.print())
+            #print (create_node.cost)
             return_children[row] = create_node #putting it back into return_children array
 
         return return_children
-
 
 def calculate_misplaced_tiles(initial_state):
     # I want to calculate how many tiles are misplaced
@@ -72,10 +71,10 @@ def calculate_misplaced_tiles(initial_state):
     total_misplaced_tiles=0
     for row in range(3):
         for column in range(3): #
-            if initial_state[row][column] != goal_state[row][column]:
+            if initial_state[row][column]!=0 and initial_state[row][column] != goal_state[row][column]:
                 total_misplaced_tiles=total_misplaced_tiles+1
     #I did minus one here to subtract the blank space
-    return total_misplaced_tiles -1
+    return total_misplaced_tiles
 
 def calculate_manhatten():
     #count the number of tiles that it is away from where it is supposed to be
@@ -108,18 +107,20 @@ def queue_make_node(initial_state):
 
 def general_search(problem, target):
     #make
-    repeat = set()
+    repeat = dict()
     nodes = queue_make_node(problem)
     total_nodes=0
     max_size=0
     #check if the whole quene is empty
     while (len(nodes)!=0):
+        total_nodes=total_nodes+1
         max_size= max(len(nodes),max_size)
+        
         #number of pops is time
         #max size of the quene is memory
         curNode = nodes.pop(0) #remove the first element
-        total_nodes=total_nodes+1
-        repeat.add(tuple(map(tuple, curNode.matrix)))
+        repeat[hash(tuple(map(tuple, curNode.matrix)))] = 1
+        print(curNode.print())
         # repeat.add(tuple(tuple(curNode.matrix)))
         #check if the state is repeated, pop it
         if(curNode.matrix == target): #this is how we are checking if its a goal state
@@ -131,16 +132,16 @@ def general_search(problem, target):
             return curNode
         for child in curNode.children(): #simmilar to expanding
             child.parent = curNode
-            if(not child in repeat):
+            if(not (hash(tuple(map(tuple, child.matrix))) in repeat)):
                 nodes.append(child) #appending children
-                repeat.add(tuple(map(tuple, child.matrix)))
+                repeat[hash(tuple(map(tuple, child.matrix)))] = 1
     return "Failure"
 
 def main():
     #assuming we
     matrix = initial_input_puzzle()
     #Now we want the user to pick the heurisitc they are going to use to solve the algorithm
-    Heuristic = input("Please pick the heuristic you want to use to solve the algorithm. 1. Uniform Cost Search, 2. The Manhattan distance, 3.The Misplaced Tile: ")
+    Heuristic = input("Please pick the heuristic you want to use to solve the algorithm. 1. Uniform Cost Search, 2. The Manhattan distance, 3.The Misplaced Tile:\n ")
     target = [[1, 2, 3], [4, 5, 6], [7, 8, 0]] #sample target
     if(Heuristic=="1"):
         #this is a node
