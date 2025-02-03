@@ -1,4 +1,3 @@
-import heapq
 #lets first create a function
 class Node:    
     def __init__(self,state):
@@ -8,13 +7,11 @@ class Node:
         self.parent = []
         #lets keep track of the cost for uniform cost search
         self.cost= 0
-        self.heristic = 0
     #this is how we print a node
     def print(self):
         #in order to print out the nodes
         print(self.matrix)
-    def __lt__(self, other):
-        return self.heristic < other.heristic
+
     def children(self):
         #now creating the children of the matrixes
         return_children = []
@@ -78,34 +75,9 @@ class Node:
         #I did minus one here to subtract the blank space
         return total_misplaced_tiles
 
-    def calculate_manhatten(self, goal_state):
-        total_distance=0
-        sum=0
-        for row in range(3):
-            for column in range(3): 
-                if self.matrix[row][column]!=0 and self.matrix[row][column]!= goal_state[row][column]:
-                    #getting the location
-                    check=False
-                    row_pos= row
-                    column_pos = column
-                    num = self.matrix[row][column]
-                    row_pos_goal=0
-                    column_pos_goal=0
-                    for row in range(3):
-                        for column in range(3): 
-                            if goal_state[row][column]==num:
-                                check=True
-                                row_pos_goal= row
-                                column_pos_goal = column
-                                break
-                        if check:
-                            break
-        
-                    total_distance+=abs(row_pos-row_pos_goal) + abs(column_pos-column_pos_goal)
-        
-        return total_distance
-        #count the number of tiles that it is away from where it is supposed to be
-        
+def calculate_manhatten():
+    #count the number of tiles that it is away from where it is supposed to be
+    return "Calculate Manhatten"
 
 def initial_input_puzzle():
     print("Lets start playing the 8 puzzle. Please enter valid 8-puzzle inputs in each row with a space when asked.")
@@ -129,12 +101,10 @@ def queue_make_node(initial_state):
     #create a new quene and node
     queue = []
     new_node = Node(initial_state)
-    heapq.heappush(queue, new_node)
-    #queue.append(new_node)
+    queue.append(new_node)
     return queue
 
-
-def general_search(problem, target, heruistic ):
+def general_search(problem, target ):
     #make
     repeat = dict()
     nodes = queue_make_node(problem)
@@ -162,14 +132,7 @@ def general_search(problem, target, heruistic ):
         for child in curNode.children(): #simmilar to expanding
             child.parent = curNode
             if(not (hash(tuple(map(tuple, child.matrix))) in repeat)):
-                if heruistic=="1" :
-                    child.heristic = child.cost 
-                elif heruistic=="3" :
-                    child.heristic = child.cost + child.calculate_misplaced_tiles(target)
-                elif heruistic=="2":
-                    child.heristic = child.cost + child.calculate_manhatten(target)
-                heapq.heappush(nodes, child) #appending children
-                # print('nodes', nodes)
+                nodes.append(child) #appending children
                 repeat[hash(tuple(map(tuple, child.matrix)))] = 1
     return "Failure"
 
@@ -179,6 +142,8 @@ def main():
     #Now we want the user to pick the heurisitc they are going to use to solve the algorithm
     Heuristic = input("Please pick the heuristic you want to use to solve the algorithm. 1. Uniform Cost Search, 2. The Manhattan distance, 3.The Misplaced Tile:\n ")
     target = [[1, 2, 3], [4, 5, 6], [7, 8, 0]] #sample target
+    if(Heuristic=="1"):
         #this is a node
-    result = (general_search(matrix, target, Heuristic)) #the problem here would be the matrix
+        result = (general_search(matrix, target)) #the problem here would be the matrix
+        result.print() # we want to print from the class
 main()
