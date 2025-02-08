@@ -12,7 +12,18 @@ class Node:
     #this is how we print a node
     def print(self):
         #in order to print out the nodes
-        print(self.matrix)
+        print(f"The best state to expand with a g(n) = {self.cost} and h(n) = {self.heristic-self.cost} is.")
+        for row in range(3):
+            print("[", end=" ")
+            for column in range(3):
+                print(self.matrix[row][column], end=" " )
+            print("]")
+        print()
+        
+    def __str__(self):
+        return str(self.matrix)
+    def __repr__(self):
+        return str(self.heristic) +":" + str(self.matrix)
     def __lt__(self, other):
         return self.heristic < other.heristic
     def children(self):
@@ -111,7 +122,6 @@ def initial_input_puzzle():
     print("Lets start playing the 8 puzzle. Please enter valid 8-puzzle inputs in each row with a space when asked.")
     print("Please enter 9 numbers where one of them is a 0 to represent a blank space ")
     matrix=[]
-    #cited from https://www.geeksforgeeks.org/python-matrix/ to build the matrix that is needed so I can display it
     #going through the row which has 3
     for row in range(3):
         first = [] #creating an array
@@ -140,6 +150,7 @@ def general_search(problem, target, heruistic ):
     nodes = queue_make_node(problem)
     total_nodes=0
     max_size=0
+    count =0
     #check if the whole quene is empty
     while (len(nodes)!=0):
         total_nodes=total_nodes+1
@@ -148,9 +159,13 @@ def general_search(problem, target, heruistic ):
         #number of pops is time
         #max size of the quene is memory
         curNode = nodes.pop(0) #remove the first element
+        count = count+1
+
         repeat[hash(tuple(map(tuple, curNode.matrix)))] = 1
-        print(curNode.print())
-        # repeat.add(tuple(tuple(curNode.matrix)))
+        
+        if(count>1):     
+            curNode.print()
+
         #check if the state is repeated, pop it
         if(curNode.matrix == target): #this is how we are checking if its a goal state
             #print("Misplaced Tiles f(n)",calculate_misplaced_tiles(problem)+curNode.cost)
