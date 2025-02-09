@@ -51,8 +51,8 @@ class Node:
             matrix=[]
             for row in range(3):
                 first = [] #creating an array
-                for column in range(3): #
-                    #this is the initial values that the user enters into the matrix
+                for column in range(3): 
+                    #this is the current matrix values
                     first.append(self.matrix[row][column])
                 matrix.append(first)
             # a tracker to break out the loop each time we make a move so there arent double of them
