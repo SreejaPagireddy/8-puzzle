@@ -9,10 +9,10 @@ class Node:
         self.cost= 0
         #This is the herusitc cost for misplaced or manhatten
         self.heristic = 0
-    #this is how we print the output
+    
+
+
     def print(self):
-        #in order to print out the nodes so we can match the ouput of the traceback. I am printing out the cost and for the herustic 
-        #I am subtracting cost because my self.herustic accounts for the cost + heristic, so just herusitic would need to subtract cost
         print(f"The best state to expand with a g(n) = {self.cost} and h(n) = {self.heristic-self.cost} is.")
         #This is going through the matrix and adding the brackets at the beg and end and printing out the matrix
         for row in range(3):
@@ -23,15 +23,24 @@ class Node:
             print("]")
         print()
         
+
+    
     def __str__(self):
         #This is representing the matrix of the object, it converts it to a string
         return str(self.matrix)
+
+    
     def __repr__(self):
         # This method was used for debugging to see the herusitic value
         return str(self.heristic) +":" + str(self.matrix)
+
+    
     def __lt__(self, other):
         # This method compares the herustic values of 2 objects
         return self.heristic < other.heristic
+
+
+    
     def children(self):
         #now creating the children of the matrixes
         return_children = []
@@ -70,7 +79,7 @@ class Node:
                                 #append to the children
                                 return_children.append(matrix)
                         elif i==2:
-                            #if len(row) < 3
+                            #if len(row) < 3 then we will proceed with the following
                             if(row + 1<3):
                                 #swap the 0
                                 matrix[row][column], matrix[row+1][column] =  matrix[row+1][column], matrix[row][column]
@@ -88,19 +97,18 @@ class Node:
                             break
                     if done:
                         break
-            #Now we want to convert all the matrixes to node because we want to store the nodes
+        #Now we want to convert all the matrixes to node because we want to store the nodes
         for row in range(len(return_children)): # now we want to traverse through all the children we appended
             create_node = Node(return_children[row]) # we want to convert it to a Node becasue we are creating these matrix as a node
             create_node.cost = self.cost + 1  # we add the cost, or depth to these children
             create_node.parent = self #we assign the intial node as the parent to these children
-            #print (create_node.print()) #debugging statement
-            #print (create_node.cost) #debugging statement
             return_children[row] = create_node #putting it back into return_children array as nodes
 
         return return_children #returning the children
 
+
+
     def calculate_misplaced_tiles(self, goal_state):
-        # I want to calculate how many tiles are misplaced
         #lets create the matrix
         total_misplaced_tiles=0 
         #go through the matrix
@@ -112,6 +120,8 @@ class Node:
                     total_misplaced_tiles=total_misplaced_tiles+1
         #We can now return the total misplaced tiles
         return total_misplaced_tiles
+
+
 
     def calculate_manhatten(self, goal_state):
         total_distance=0 # lets calculate the total_distance
@@ -132,6 +142,7 @@ class Node:
                     row_pos_goal=0
                     column_pos_goal=0
                     #go through the goal state matrix
+
                     for row in range(3):
                         for column in range(3): 
                             #now we find where that tile is we stored in the goal state
@@ -151,6 +162,8 @@ class Node:
         return total_distance
         #count the number of tiles that it is away from where it is supposed to be
         
+
+
 
 def initial_input_puzzle():
     #This is our initial setup to get the user input
@@ -173,6 +186,7 @@ def initial_input_puzzle():
         print()
     #lets return that matrix that the user generated
     return matrix
+
 
 def queue_make_node(initial_state):
     #create a new quene and node
@@ -200,9 +214,6 @@ def general_search(problem, target, heruistic ):
         #lets add the total_nodes that we are expanding and lets get the max size of the quene
         total_nodes=total_nodes+1
         max_size= max(len(nodes),max_size)
-        
-        #number of pops is time
-        #max size of the quene is memory
         curNode = nodes.pop(0) #remove the first element
         count = count+1 # increase count
         #add the matrix into the repeat dictionary
@@ -241,6 +252,7 @@ def general_search(problem, target, heruistic ):
                 repeat[hash(tuple(map(tuple, child.matrix)))] = 1
     #we are going to return failure if the quene was empty
     return "Failure"
+
 
 def main():
     #creating our first matrix, start state
