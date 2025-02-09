@@ -13,6 +13,7 @@ class Node:
 
 
     def print(self):
+        #we are printing out the cost and heuristic for the matrix
         print(f"The best state to expand with a g(n) = {self.cost} and h(n) = {self.heristic-self.cost} is.")
         #This is going through the matrix and adding the brackets at the beg and end and printing out the matrix
         for row in range(3):
