@@ -1,8 +1,7 @@
 import heapq
-#lets first create a function
 class Node:    
     def __init__(self,state):
-        #this is the state of the node
+        #this is the state of the node, the matrix
         self.matrix = state
         #parent tracker
         self.parent = []
@@ -10,12 +9,12 @@ class Node:
         self.cost= 0
         #This is the herusitc cost for misplaced or manhatten
         self.heristic = 0
-    #this is how we print a node
+    #this is how we print the output
     def print(self):
-        #in order to print out the nodes so we can match the ouput of the traceback so I am printing out the cost and for the herustic 
+        #in order to print out the nodes so we can match the ouput of the traceback. I am printing out the cost and for the herustic 
         #I am subtracting cost because my self.herustic accounts for the cost + heristic, so just herusitic would need to subtract cost
         print(f"The best state to expand with a g(n) = {self.cost} and h(n) = {self.heristic-self.cost} is.")
-        #This is going through the current matrix and adding the brackets at the beg and end and printing out the matrix
+        #This is going through the matrix and adding the brackets at the beg and end and printing out the matrix
         for row in range(3):
             print("[", end=" ")
             for column in range(3):
@@ -36,7 +35,7 @@ class Node:
     def children(self):
         #now creating the children of the matrixes
         return_children = []
-        #we want to make max 4 matrixes in the case that the space is in between, at max 4 children
+        #we want to make max 4 matrixes in the case that the 0 is in between, at max 4 children
         for i in range(4):
             #lets create the matrix
             matrix=[]
@@ -89,13 +88,13 @@ class Node:
                             break
                     if done:
                         break
-            #Now we want to create all the matrixes to node because we want to store the nodes
+            #Now we want to convert all the matrixes to node because we want to store the nodes
         for row in range(len(return_children)): # now we want to traverse through all the children we appended
             create_node = Node(return_children[row]) # we want to convert it to a Node becasue we are creating these matrix as a node
             create_node.cost = self.cost + 1  # we add the cost, or depth to these children
             create_node.parent = self #we assign the intial node as the parent to these children
-            #print (create_node.print())
-            #print (create_node.cost)
+            #print (create_node.print()) #debugging statement
+            #print (create_node.cost) #debugging statement
             return_children[row] = create_node #putting it back into return_children array as nodes
 
         return return_children #returning the children
@@ -180,7 +179,7 @@ def queue_make_node(initial_state):
     queue = []
     #creating a node
     new_node = Node(initial_state)
-    #using a heapq so we can order it based on the priority values or in other words the herustic
+    #using a heapq so we can order it based on the priority values or in other words the herustic + cost
     heapq.heappush(queue, new_node) 
     #queue.append(new_node)
     return queue
@@ -206,7 +205,7 @@ def general_search(problem, target, heruistic ):
         #max size of the quene is memory
         curNode = nodes.pop(0) #remove the first element
         count = count+1 # increase count
-        #ass the matrix into the repeat dictionary
+        #add the matrix into the repeat dictionary
         repeat[hash(tuple(map(tuple, curNode.matrix)))] = 1
         #print all the matrix's except for the intiial one
         if(count>1):     
@@ -238,7 +237,6 @@ def general_search(problem, target, heruistic ):
                     #add the manhatten herusitic with the cost
                     child.heristic = child.cost + child.calculate_manhatten(target)
                 heapq.heappush(nodes, child) #appending children based on the herusitc values, priority quene
-                # print('nodes', nodes)
                 #adding these to repeate so we dont repeate in any of the children
                 repeat[hash(tuple(map(tuple, child.matrix)))] = 1
     #we are going to return failure if the quene was empty
